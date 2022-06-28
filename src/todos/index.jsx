@@ -1,16 +1,19 @@
 import React, { useState } from 'react'
-import useData from '../database/data';
 import TodoForm from './todoform'
+
+;
 
 
 const Todos = () => {
-  const [todos, setTodos] = useState([]);
-  const {getAll,del,insert, errs} = useData();
-
+  const loadFromStorage = ()=>{
+    const items = localStorage.getItem('todos')?JSON.parse(localStorage.getItem('todos')):[];
+return items;
+  };
+  const [todos, setTodos] = useState([...loadFromStorage()]);
+  
+ 
   React.useEffect(() => {
-    console.log(todos)
-    console({getAll, errs})
-
+    
   }, [todos]);
 
 
@@ -18,10 +21,12 @@ const Todos = () => {
     let newTodo = { title };
     // newTodo.id = Math.random() * 10000;
     newTodo.completed = false;
+let _todos = [newTodo, ...todos];
+    
 
-    newTodo.dateUpdated = Date.now();
-
-    setTodos([newTodo, ...todos]);
+    setTodos(_todos);
+    saveToStorage(_todos);
+   
   }
 
   const toggleCompleted = index => {
@@ -34,6 +39,7 @@ const Todos = () => {
     });
     sortTodos(temp);
     setTodos(temp);
+  saveToStorage(temp);
   };
 
   const sortTodos = (_todos) => {
@@ -43,7 +49,16 @@ const Todos = () => {
   const clearTodos = e => {
     console.log('clear')
     setTodos([]);
+    restLocalStorage();
+
   }
+
+ 
+  const saveToStorage = (data)=>{
+    localStorage.setItem('todos', JSON.stringify(data));;
+  };
+  const restLocalStorage = ()=>localStorage.removeItem('todos');
+
   return (
     <div >
       <div>
