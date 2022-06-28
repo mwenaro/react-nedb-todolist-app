@@ -59,15 +59,15 @@ const Todos = () => {
   const restLocalStorage = () => localStorage.removeItem('todos');
 
   return (
-    <div className='w3-container todos-container'>
-      <div className=''>
-        <div className='w3-container'>
+    <div className='w3-container '>
+      <div className='todo-form-container'>
+       
           <TodoForm addTodo={addTodo} />
-        </div>
+      
 
-        <div className='clear-tbn-container '>
+       
           <button onClick={clearTodos} className=''>Clear</button>
-        </div>
+        
 
       </div>
       <h2>Todos here</h2>
