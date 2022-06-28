@@ -1,7 +1,7 @@
 import Todos from './todos';
 
 function App() {
-  
+
   return (
     <div className="App">
       <Todos />

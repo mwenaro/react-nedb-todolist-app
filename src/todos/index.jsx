@@ -1,40 +1,66 @@
-import React, {useState} from 'react'
-
+import React, { useState } from 'react'
+import useData from '../database/data';
 import TodoForm from './todoform'
 
-function Todos() {
-  const [todos, setTodos] = useState([
-    {title: 'hello task 1'},
-    {title:'hello task 3'}
-  ]);
 
-  React.useEffect(()=>{
-    console.log(todos);
-  },[todos]);
-  const addTodo = title =>{
-    let newTodo = {title};
-   newTodo.completed = false;
-    newTodo.dateCreated = new Date();
-    newTodo.dateUpdated = new Date();
+const Todos = () => {
+  const [todos, setTodos] = useState([]);
+  const {getAll,del,insert, errs} = useData();
+
+  React.useEffect(() => {
+    console.log(todos)
+    console({getAll, errs})
+
+  }, [todos]);
+
+
+  const addTodo = title => {
+    let newTodo = { title };
+    // newTodo.id = Math.random() * 10000;
+    newTodo.completed = false;
+
+    newTodo.dateUpdated = Date.now();
 
     setTodos([newTodo, ...todos]);
   }
-    return (
-      <div >
-        <TodoForm addTodo = {addTodo} />
-<h2>Todos here</h2>
-        <div >
-            {
-                todos.map((todo, i)=>{
-                    <span key ={i}
-                    style= {{backgroundColor: 'black',color:'white'}}
-                    >{todo.title} i </span>
-                })
-            }
-        </div>
-      </div>
-    );
+
+  const toggleCompleted = index => {
+    let temp = todos.map((el, i) => {
+      if (i === index) {
+        el.completed = !el.completed;
+
+      }
+      return el;
+    });
+    sortTodos(temp);
+    setTodos(temp);
+  };
+
+  const sortTodos = (_todos) => {
+    _todos.sort((a, b) => a.completed - b.completed);
+
   }
-  
-  export default Todos;
-  
+  const clearTodos = e => {
+    console.log('clear')
+    setTodos([]);
+  }
+  return (
+    <div >
+      <div>
+        <TodoForm addTodo={addTodo} />
+        <div className='clear-tbn-container'>
+          <button  onClick={clearTodos}>Clear</button>
+        </div>
+
+      </div>
+      <h2>Todos here</h2>
+      <div>
+        {
+          todos.map((todo, i) => <span onClick={() => toggleCompleted(i)} key={i}> <div style={{}}>{todo.title} - {todo.completed ? 'completed' : 'not'} </div></span>)
+        }
+      </div>
+    </div>
+  );
+}
+
+export default Todos;
