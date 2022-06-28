@@ -25,11 +25,17 @@ function TodoForm(props) {
 
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input type="text" value={title} onChange={handleChange} onKeyUp={handleEnter} />
+    <form onSubmit={handleSubmit} className='w3-form todo-form'>
+      <input  
+      className= 'w3-input w3-round-4 '  
+      placeholder = 'Add a todo ' 
+      type="text" value={title} 
+      onChange={handleChange} 
+      onKeyUp={handleEnter} />
 
     </form>
   );
 }
 
 export default TodoForm;
+

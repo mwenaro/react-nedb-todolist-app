@@ -5,11 +5,11 @@ import TodoForm from './todoform'
 
 
 const Todos = () => {
-  const loadFromStorage = () => {
+  const loadFromLocalStorage = () => {
     const items = localStorage.getItem('todos') ? JSON.parse(localStorage.getItem('todos')) : [];
     return items;
   };
-  const [todos, setTodos] = useState([...loadFromStorage()]);
+  const [todos, setTodos] = useState([...loadFromLocalStorage()]);
 
 
   React.useEffect(() => {
@@ -19,13 +19,12 @@ const Todos = () => {
 
   const addTodo = title => {
     let newTodo = { title };
-    // newTodo.id = Math.random() * 10000;
     newTodo.completed = false;
     let _todos = [newTodo, ...todos];
 
 
     setTodos(_todos);
-    saveToStorage(_todos);
+    saveToLocalStorage(_todos);
 
   }
 
@@ -39,7 +38,7 @@ const Todos = () => {
     });
     sortTodos(temp);
     setTodos(temp);
-    saveToStorage(temp);
+    saveToLocalStorage(temp);
   };
 
   const sortTodos = (_todos) => {
@@ -54,24 +53,30 @@ const Todos = () => {
   }
 
 
-  const saveToStorage = (data) => {
+  const saveToLocalStorage = (data) => {
     localStorage.setItem('todos', JSON.stringify(data));;
   };
   const restLocalStorage = () => localStorage.removeItem('todos');
 
   return (
-    <div >
-      <div>
-        <TodoForm addTodo={addTodo} />
-        <div className='clear-tbn-container'>
-          <button onClick={clearTodos}>Clear</button>
+    <div className='w3-container todos-container'>
+      <div className=''>
+        <div className='w3-container'>
+          <TodoForm addTodo={addTodo} />
+        </div>
+
+        <div className='clear-tbn-container '>
+          <button onClick={clearTodos} className=''>Clear</button>
         </div>
 
       </div>
       <h2>Todos here</h2>
-      <div>
+      <div className=''>
         {
-          todos.map((todo, i) => <span onClick={() => toggleCompleted(i)} key={i}> <div style={{}}>{todo.title} - {todo.completed ? 'completed' : 'not'} </div></span>)
+          todos.map((todo, i) =>
+           <span onClick={() => toggleCompleted(i)} key={i}>
+             <div style={{textDecoration:`${todo.completed?'line-through':'inherit'}`}}>{todo.title}  </div>
+             </span>)
         }
       </div>
     </div>
